@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5833995329740377001}
   - component: {fileID: 5833995329740377002}
   - component: {fileID: 5833995329740377007}
+  - component: {fileID: 8462568692303126347}
   m_Layer: 0
   m_Name: Old Man
   m_TagString: Untagged
@@ -192,4 +193,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 57e663b6e55d64e44a5ef711b8bcf74c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &8462568692303126347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5833995329740377003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 195ace075aa30594ab00f6ad438d5c3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   speed: 5
+  reachDistance: 0.5
+  OnReachPosition:
+    m_PersistentCalls:
+      m_Calls: []

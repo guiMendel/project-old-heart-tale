@@ -6,27 +6,24 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : MonoBehaviour
 {
-  // === PARAMS
+  // === REFS
 
-  public float speed = 5f;
-  public float sprintSpeed = 6f;
+  Movement movement;
 
-  // === STATE
-
-  Vector2 direction;
-
-  private void Update()
+  private void Awake()
   {
-    transform.Translate(direction * speed * Time.deltaTime);
+    movement = GetComponent<Movement>();
+
+    Helper.AssertNotNull(movement);
   }
 
   public void Move(InputAction.CallbackContext value)
   {
     if (value.phase == InputActionPhase.Performed)
-      direction = value.ReadValue<Vector2>();
+      movement.FollowDirection(value.ReadValue<Vector2>());
 
     else if (value.phase == InputActionPhase.Canceled)
-      direction = Vector2.zero;
+      movement.Halt();
 
   }
 }
