@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
   // === PARAMS
 
   public float speed = 5f;
+  public float sprintSpeed = 6f;
 
   // === STATE
 
