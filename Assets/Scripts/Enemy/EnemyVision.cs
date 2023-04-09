@@ -16,6 +16,12 @@ public class EnemyVision : MonoBehaviour
 
   public float targetDetectionFrequency = 0.2f;
 
+  // === EVENTS
+
+  public Event.ETransform OnDetectTarget;
+
+  public Event.ETransform OnLoseTarget;
+
   // === STATE
 
   public List<Transform> ActiveTargets { get; private set; } = new List<Transform>();
@@ -36,6 +42,7 @@ public class EnemyVision : MonoBehaviour
     StartCoroutine(DetectTargets());
   }
 
+
   IEnumerator DetectTargets()
   {
     while (true)
@@ -49,6 +56,7 @@ public class EnemyVision : MonoBehaviour
   {
     Collider2D[] targetsInRange = Physics2D.OverlapCircleAll(transform.position, range, targetLayer);
 
+    var previousTargets = new List<Transform>(ActiveTargets);
     ActiveTargets.Clear();
 
     foreach (var target in targetsInRange)
@@ -66,6 +74,14 @@ public class EnemyVision : MonoBehaviour
 
       ActiveTargets.Add(target.transform);
     }
+
+    // Detect new targets
+    foreach (var activeTarget in ActiveTargets) if (previousTargets.Contains(activeTarget) == false)
+        OnDetectTarget.Invoke(activeTarget);
+
+    // Lose old targets
+    foreach (var previousTarget in previousTargets) if (ActiveTargets.Contains(previousTarget) == false)
+        OnLoseTarget.Invoke(previousTarget);
   }
 
 }

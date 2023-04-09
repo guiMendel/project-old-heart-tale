@@ -10,42 +10,94 @@ public class EnemyMovement : MonoBehaviour
 
   public Transform waypoints;
 
+  public float chaseSpeedModifier = 1.5f;
+
+  public float noSightChaseTolerance = 1f;
+
   // === STATE
 
-  int currentTarget = 0;
+  int currentWaypoint = 0;
+
+  Transform chaseTarget;
+
+  Coroutine loseTargetTimer;
+
+  float initialSpeed;
 
   // === REFS
 
   Movement movement;
+  EnemyVision enemyVision;
 
   private void Awake()
   {
     movement = GetComponent<Movement>();
+    enemyVision = GetComponent<EnemyVision>();
 
-    Helper.AssertNotNull(movement);
+    Helper.AssertNotNull(movement, enemyVision);
+
+    initialSpeed = movement.speed;
+
+    enemyVision.OnDetectTarget.AddListener(Chase);
+    enemyVision.OnLoseTarget.AddListener(
+      (target) => loseTargetTimer = StartCoroutine(MaybeLoseTarget(target)));
   }
 
   private void Start()
   {
     Debug.Assert(waypoints.childCount > 0, "Must assign waypoints to the enemy movement script");
 
-    movement.Follow(FindObjectOfType<PlayerMovement>().transform);
+    // movement.Follow(FindObjectOfType<PlayerMovement>().transform);
 
-    // transform.position = waypoints.GetChild(0).position;
+    AdvanceTarget();
+  }
 
-    // void MoveToNextTarget()
-    // {
-    //   AdvanceTarget();
-    //   movement.MoveTo(waypoints.GetChild(currentTarget).position);
-    // }
+  void Patrol()
+  {
+    movement.MoveTo(waypoints.GetChild(currentWaypoint).position, AdvanceTarget);
+  }
 
-    // movement.OnReachPosition.AddListener(MoveToNextTarget);
+  void Chase(Transform target)
+  {
+    print(("Chase", target.gameObject));
 
-    // MoveToNextTarget();
+    if (chaseTarget != null)
+    {
+      if (target == chaseTarget && loseTargetTimer != null)
+      {
+        StopCoroutine(loseTargetTimer);
+        loseTargetTimer = null;
+      }
+
+      return;
+    }
+
+    chaseTarget = target;
+
+    movement.Follow(target);
+    movement.speed = initialSpeed * chaseSpeedModifier;
+  }
+
+  IEnumerator MaybeLoseTarget(Transform target)
+  {
+    if (chaseTarget != target) yield break;
+
+    yield return new WaitForSeconds(noSightChaseTolerance);
+
+    print(("Lose", target.gameObject));
+
+    chaseTarget = null;
+
+    movement.MoveTo(target.position, () =>
+    {
+      movement.speed = initialSpeed;
+      Patrol();
+    });
   }
 
   void AdvanceTarget()
   {
-    currentTarget = (currentTarget + 1) % waypoints.childCount;
+    currentWaypoint = (currentWaypoint + 1) % waypoints.childCount;
+    Patrol();
   }
 }

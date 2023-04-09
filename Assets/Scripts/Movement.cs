@@ -14,9 +14,6 @@ public class Movement : MonoBehaviour
 
   // === EVENTS
 
-  // Called when MoveTo reaches a position
-  public UnityEvent OnReachPosition;
-
   // Called when facing direction changes
   public Event.DoubleVector2 OnChangeFacingDirection;
 
@@ -26,7 +23,7 @@ public class Movement : MonoBehaviour
   public Vector2 FacingDirection
   {
     get { return _facingDirection; }
-    
+
     private set
     {
       OnChangeFacingDirection.Invoke(value, _facingDirection);
@@ -46,11 +43,11 @@ public class Movement : MonoBehaviour
     currentMovement = null;
   }
 
-  public void MoveTo(Vector2 targetPosition)
+  public void MoveTo(Vector2 targetPosition, UnityAction onReach = null)
   {
     Halt();
 
-    currentMovement = StartCoroutine(MoveToCoroutine(targetPosition));
+    currentMovement = StartCoroutine(MoveToCoroutine(targetPosition, onReach));
   }
 
   public void FollowDirection(Vector2 direction)
@@ -77,7 +74,7 @@ public class Movement : MonoBehaviour
     FacingDirection = Helper.DegreeToVector2(Mathf.Round(angle / 45) * 45);
   }
 
-  IEnumerator MoveToCoroutine(Vector2 targetPosition)
+  IEnumerator MoveToCoroutine(Vector2 targetPosition, UnityAction onReach = null)
   {
     while (transform.position.SqrDistance(targetPosition) > 0.001f)
     {
@@ -89,9 +86,10 @@ public class Movement : MonoBehaviour
       yield return new WaitForEndOfFrame();
     }
 
-    OnReachPosition.Invoke();
-
     currentMovement = null;
+
+    if (onReach != null)
+      onReach();
   }
 
   IEnumerator FollowDirectionCoroutine(Vector2 direction)
