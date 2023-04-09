@@ -14,5 +14,15 @@ namespace ExtensionMethods
       return (self - other).sqrMagnitude;
     }
 
+    public static float AsDegrees(this Vector2 self)
+    {
+      return Vector2.SignedAngle(Vector2.right, self);
+    }
+
+    public static float AsDegrees(this Vector3 self)
+    {
+      return Vector3.SignedAngle(Vector2.right, self, Vector3.back);
+    }
+
   }
 }

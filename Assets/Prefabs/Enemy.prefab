@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 195ace075aa30594ab00f6ad438d5c3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 5.5
+  speed: 2
   reachDistance: 0.5
   OnReachPosition:
     m_PersistentCalls:
@@ -130,4 +130,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   range: 4
-  angle: 45
+  angle: 110
+  targetLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  obstructionLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  targetDetectionFrequency: 0.2
