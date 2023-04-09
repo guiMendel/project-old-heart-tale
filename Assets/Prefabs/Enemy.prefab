@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4188116615619304396}
   - component: {fileID: 7462006735106556791}
   - component: {fileID: -9105377659968169969}
+  - component: {fileID: -7524741418902236191}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -116,3 +117,17 @@ MonoBehaviour:
   OnReachPosition:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-7524741418902236191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8987060631863661997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2ca87f5842adcf54caeb658b59090046, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 4
+  angle: 45

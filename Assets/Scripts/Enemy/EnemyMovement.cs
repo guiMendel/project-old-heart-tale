@@ -7,7 +7,7 @@ using UnityEngine;
 public class EnemyMovement : MonoBehaviour
 {
   // === PARAMS
-  
+
   public Transform waypoints;
 
   // === STATE
@@ -29,17 +29,19 @@ public class EnemyMovement : MonoBehaviour
   {
     Debug.Assert(waypoints.childCount > 0, "Must assign waypoints to the enemy movement script");
 
-    transform.position = waypoints.GetChild(0).position;
+    movement.Follow(FindObjectOfType<PlayerMovement>().transform);
 
-    void MoveToNextTarget()
-    {
-      AdvanceTarget();
-      movement.MoveTo(waypoints.GetChild(currentTarget).position);
-    }
+    // transform.position = waypoints.GetChild(0).position;
 
-    movement.OnReachPosition.AddListener(MoveToNextTarget);
+    // void MoveToNextTarget()
+    // {
+    //   AdvanceTarget();
+    //   movement.MoveTo(waypoints.GetChild(currentTarget).position);
+    // }
 
-    MoveToNextTarget();
+    // movement.OnReachPosition.AddListener(MoveToNextTarget);
+
+    // MoveToNextTarget();
   }
 
   void AdvanceTarget()

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using ExtensionMethods;
 using UnityEngine;
 using UnityEngine.Events;
@@ -48,7 +47,7 @@ public class Movement : MonoBehaviour
     currentMovement = StartCoroutine(FollowDirectionCoroutine(direction.normalized));
   }
 
-  public void Follow(Transform target, bool stopOnReach)
+  public void Follow(Transform target, bool stopOnReach = false)
   {
     Halt();
 
@@ -84,10 +83,12 @@ public class Movement : MonoBehaviour
 
   IEnumerator FollowCoroutine(Transform target, bool stopOnReach)
   {
-    float distance = Vector2.Distance(transform.position, target.position);
-
-    while (stopOnReach == false || distance > reachDistance)
+    while (true)
     {
+      float distance = Vector2.Distance(transform.position, target.position);
+
+      if (stopOnReach && distance <= reachDistance) break;
+
       if (distance > reachDistance)
         transform.position = Vector2.MoveTowards(
           transform.position, target.position, Time.deltaTime * speed);
