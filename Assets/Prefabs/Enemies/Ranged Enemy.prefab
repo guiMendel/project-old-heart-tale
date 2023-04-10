@@ -13,8 +13,11 @@ GameObject:
   - component: {fileID: 7462006735106556791}
   - component: {fileID: -9105377659968169969}
   - component: {fileID: -7524741418902236191}
+  - component: {fileID: 1922104645}
+  - component: {fileID: 1922104644}
+  - component: {fileID: 8564744372363720905}
   m_Layer: 0
-  m_Name: Enemy
+  m_Name: Ranged Enemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +80,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
-  m_Color: {r: 1, g: 0.28773582, b: 0.28773582, a: 1}
+  m_Color: {r: 1, g: 0.6853473, b: 0.28627455, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -100,6 +103,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   waypoints: {fileID: 0}
+  chaseSpeedModifier: 0.7
+  noSightChaseTolerance: 1
 --- !u!114 &-9105377659968169969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,9 +117,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 195ace075aa30594ab00f6ad438d5c3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 2
+  speed: 4
   reachDistance: 0.5
-  OnReachPosition:
+  OnChangeFacingDirection:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &-7524741418902236191
@@ -129,7 +134,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ca87f5842adcf54caeb658b59090046, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 4
+  range: 6
   angle: 110
   targetLayer:
     serializedVersion: 2
@@ -138,3 +143,52 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   targetDetectionFrequency: 0.2
+  OnDetectTarget:
+    m_PersistentCalls:
+      m_Calls: []
+  OnLoseTarget:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!58 &1922104645
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8987060631863661997}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
+--- !u!114 &1922104644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8987060631863661997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 144a56bb9d916e543b8f210620a501c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8564744372363720905
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8987060631863661997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 70e319fa4fc5d2f43a81eadf1eac88a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectile: {fileID: 9041648749035219203, guid: 64fc62a4e17470240b61dd6dc75b9f9e, type: 3}
+  cooldown: 3
+  maxDetectionDelay: 0.1
