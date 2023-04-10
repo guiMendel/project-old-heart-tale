@@ -9,16 +9,25 @@ public class PlayerMovement : MonoBehaviour
   // === REFS
 
   Movement movement;
+  Health health;
 
   private void Awake()
   {
     movement = GetComponent<Movement>();
+    health = GetComponent<Health>();
 
-    Helper.AssertNotNull(movement);
+    Helper.AssertNotNull(movement, health);
+  }
+
+  private void Start()
+  {
+    health.OnDeath.AddListener(movement.Halt);
   }
 
   public void Move(InputAction.CallbackContext value)
   {
+    if (health.Alive == false) return;
+
     if (value.phase == InputActionPhase.Performed)
       movement.FollowDirection(value.ReadValue<Vector2>());
 

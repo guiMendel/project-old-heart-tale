@@ -33,6 +33,27 @@ public class Movement : MonoBehaviour
 
   Coroutine currentMovement;
 
+  // Position to assume in the next fixed update
+  Vector2 nextPosition;
+
+  // === REFS
+
+  Rigidbody2D body;
+
+
+  private void Awake()
+  {
+    nextPosition = transform.position;
+
+    body = GetComponent<Rigidbody2D>();
+  }
+
+  private void FixedUpdate()
+  {
+    if (body != null) body.MovePosition(nextPosition);
+    else transform.position = nextPosition;
+  }
+
   // === INTERFACE
 
   public void Halt()
@@ -74,14 +95,24 @@ public class Movement : MonoBehaviour
     FacingDirection = Helper.DegreeToVector2(Mathf.Round(angle / 45) * 45);
   }
 
+  void Translate(Vector2 displacement)
+  {
+    nextPosition = nextPosition + displacement;
+  }
+
+  void SetPosition(Vector2 position)
+  {
+    nextPosition = position;
+  }
+
   IEnumerator MoveToCoroutine(Vector2 targetPosition, UnityAction onReach = null)
   {
     while (transform.position.SqrDistance(targetPosition) > 0.001f)
     {
       UpdateFacingDirection(targetPosition - (Vector2)transform.position);
 
-      transform.position = Vector2.MoveTowards(
-        transform.position, targetPosition, Time.deltaTime * speed);
+      SetPosition(Vector2.MoveTowards(
+        nextPosition, targetPosition, Time.deltaTime * speed));
 
       yield return new WaitForEndOfFrame();
     }
@@ -98,7 +129,7 @@ public class Movement : MonoBehaviour
     {
       UpdateFacingDirection(direction);
 
-      transform.Translate(direction * speed * Time.deltaTime);
+      Translate(direction * speed * Time.deltaTime);
 
       yield return new WaitForEndOfFrame();
     }
@@ -118,8 +149,8 @@ public class Movement : MonoBehaviour
       {
         UpdateFacingDirection(target.position - transform.position);
 
-        transform.position = Vector2.MoveTowards(
-          transform.position, target.position, Time.deltaTime * speed);
+        SetPosition(Vector2.MoveTowards(
+          nextPosition, target.position, Time.deltaTime * speed));
       }
 
       yield return new WaitForEndOfFrame();

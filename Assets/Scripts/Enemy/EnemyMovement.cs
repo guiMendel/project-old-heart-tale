@@ -59,8 +59,6 @@ public class EnemyMovement : MonoBehaviour
 
   void Chase(Transform target)
   {
-    print(("Chase", target.gameObject));
-
     if (chaseTarget != null)
     {
       if (target == chaseTarget && loseTargetTimer != null)
@@ -83,8 +81,6 @@ public class EnemyMovement : MonoBehaviour
     if (chaseTarget != target) yield break;
 
     yield return new WaitForSeconds(noSightChaseTolerance);
-
-    print(("Lose", target.gameObject));
 
     chaseTarget = null;
 
