@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 1922104645}
   - component: {fileID: 1922104644}
   - component: {fileID: 8564744372363720905}
+  - component: {fileID: -1009202639707440586}
   m_Layer: 0
   m_Name: Ranged Enemy
   m_TagString: Untagged
@@ -190,5 +191,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   projectile: {fileID: 9041648749035219203, guid: 64fc62a4e17470240b61dd6dc75b9f9e, type: 3}
+  range:
+    min: 1
+    max: 4
   cooldown: 3
   maxDetectionDelay: 0.1
+--- !u!114 &-1009202639707440586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8987060631863661997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 909fca772cc99734187d0a777ab40e8d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OnChangeState:
+    m_PersistentCalls:
+      m_Calls: []

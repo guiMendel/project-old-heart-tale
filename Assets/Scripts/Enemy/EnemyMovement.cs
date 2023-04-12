@@ -28,37 +28,55 @@ public class EnemyMovement : MonoBehaviour
 
   Movement movement;
   EnemyVision enemyVision;
+  EnemyState enemyState;
 
   private void Awake()
   {
     movement = GetComponent<Movement>();
     enemyVision = GetComponent<EnemyVision>();
+    enemyState = GetComponent<EnemyState>();
 
-    Helper.AssertNotNull(movement, enemyVision);
+    Helper.AssertNotNull(movement, enemyVision, enemyState);
 
     initialSpeed = movement.speed;
 
-    enemyVision.OnDetectTarget.AddListener(Chase);
+    enemyVision.OnDetectTarget.AddListener(target =>
+    {
+      if (enemyState.OneOf(EnemyState.State.Patrol, EnemyState.State.Idle, EnemyState.State.Chase)) Chase(target);
+    });
+
     enemyVision.OnLoseTarget.AddListener(
       (target) => loseTargetTimer = StartCoroutine(MaybeLoseTarget(target)));
+
+    enemyState.OnChangeState.AddListener((_, oldState) =>
+    {
+      if (oldState == EnemyState.State.Chase)
+        chaseTarget = null;
+    });
   }
 
   private void Start()
   {
     Debug.Assert(waypoints.childCount > 0, "Must assign waypoints to the enemy movement script");
 
-    // movement.Follow(FindObjectOfType<PlayerMovement>().transform);
-
     AdvanceTarget();
   }
 
   void Patrol()
   {
-    movement.MoveTo(waypoints.GetChild(currentWaypoint).position, AdvanceTarget);
+    enemyState.ActiveState = EnemyState.State.Patrol;
+    movement.speed = initialSpeed;
+
+    movement.MoveTo(waypoints.GetChild(currentWaypoint).position, () =>
+    {
+      if (enemyState.OneOf(EnemyState.State.Patrol)) AdvanceTarget();
+    });
   }
 
   void Chase(Transform target)
   {
+    enemyState.ActiveState = EnemyState.State.Chase;
+
     if (chaseTarget != null)
     {
       if (target == chaseTarget && loseTargetTimer != null)
@@ -66,8 +84,6 @@ public class EnemyMovement : MonoBehaviour
         StopCoroutine(loseTargetTimer);
         loseTargetTimer = null;
       }
-
-      return;
     }
 
     chaseTarget = target;
@@ -82,13 +98,12 @@ public class EnemyMovement : MonoBehaviour
 
     yield return new WaitForSeconds(noSightChaseTolerance);
 
-    chaseTarget = null;
-
     movement.MoveTo(target.position, () =>
     {
-      movement.speed = initialSpeed;
-      Patrol();
+      if (enemyState.OneOf(EnemyState.State.Chase)) Patrol();
     });
+
+    loseTargetTimer = null;
   }
 
   void AdvanceTarget()
