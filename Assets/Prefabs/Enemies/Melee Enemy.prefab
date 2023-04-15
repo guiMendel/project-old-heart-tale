@@ -10,11 +10,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1942340743577757987}
   - component: {fileID: 4188116615619304396}
-  - component: {fileID: 7462006735106556791}
   - component: {fileID: -9105377659968169969}
   - component: {fileID: -7524741418902236191}
   - component: {fileID: 1922104645}
   - component: {fileID: 1922104644}
+  - component: {fileID: 1509525646479997166}
+  - component: {fileID: 2005469239722469761}
+  - component: {fileID: 9103788810147833270}
   m_Layer: 0
   m_Name: Melee Enemy
   m_TagString: Untagged
@@ -89,21 +91,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &7462006735106556791
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8987060631863661997}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3883b7d9dde7ac4dbbeb90cd742089a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  waypoints: {fileID: 0}
-  chaseSpeedModifier: 0.7
-  noSightChaseTolerance: 1
 --- !u!114 &-9105377659968169969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -176,3 +163,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 144a56bb9d916e543b8f210620a501c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1509525646479997166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8987060631863661997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 063036707d4109c45b41c019990e14c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initialState: {fileID: 9103788810147833270}
+  OnChangeState:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &2005469239722469761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8987060631863661997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7e640db575ca6ce4cbbe4b2d573abde0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chaseSpeedModifier: 1.5
+  noSightChaseTolerance: 1
+--- !u!114 &9103788810147833270
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8987060631863661997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32d581acc03af0d4f80f7868a7b4a0ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waypoints: {fileID: 0}

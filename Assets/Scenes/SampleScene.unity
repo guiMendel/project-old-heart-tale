@@ -397,6 +397,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1985985117}
     m_Modifications:
+    - target: {fileID: -2103321622056679381, guid: ef25ad6154c550445b3a062e38f32b53, type: 3}
+      propertyPath: waypoints
+      value: 
+      objectReference: {fileID: 1658469581}
     - target: {fileID: 1942340743577757987, guid: ef25ad6154c550445b3a062e38f32b53, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -956,7 +960,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7462006735106556791, guid: 5da45802e3f3c7c468ba529920b338cd, type: 3}
+    - target: {fileID: 9103788810147833270, guid: 5da45802e3f3c7c468ba529920b338cd, type: 3}
+      propertyPath: waypoints
+      value: 
+      objectReference: {fileID: 743023951}
+    - target: {fileID: 0}
       propertyPath: waypoints
       value: 
       objectReference: {fileID: 743023951}

@@ -13,6 +13,6 @@ namespace Event
 
   [Serializable] public class ETransform : UnityEvent<Transform> { }
 
-  [Serializable] public class DoubleEnemyState : UnityEvent<EnemyState.State, EnemyState.State> { }
+  [Serializable] public class DoubleCharacterState : UnityEvent<CharacterState, CharacterState> { }
 
 }

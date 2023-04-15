@@ -2,24 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyState : MonoBehaviour
+public class CharacterStateManager : MonoBehaviour
 {
+  // === PARAMS
+
+  public CharacterState initialState;
+
   // === EVENTS
 
-  public Event.DoubleEnemyState OnChangeState;
+  public Event.DoubleCharacterState OnChangeState;
 
   // === STATE
+  CharacterState _activeState = null;
 
-  public enum State
-  {
-    Idle,
-    Patrol,
-    Chase,
-    RangedAttack
-  }
-
-  State _activeState = State.Idle;
-  public State ActiveState
+  public CharacterState ActiveState
   {
     get
     {
@@ -36,15 +32,20 @@ public class EnemyState : MonoBehaviour
     }
   }
 
-  public bool OneOf(params State[] states)
+  private void Start()
   {
-    foreach (State state in states)
+    ActiveState = initialState;
+  }
+
+  public bool OneOf(params CharacterState[] states)
+  {
+    foreach (CharacterState state in states)
       if (ActiveState == state) return true;
 
     return false;
   }
 
-  public bool Not(params State[] states)
+  public bool Not(params CharacterState[] states)
   {
     return OneOf(states) == false;
   }
