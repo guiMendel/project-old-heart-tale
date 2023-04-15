@@ -62,6 +62,9 @@ public class EnemyVision : MonoBehaviour
 
     foreach (var target in targetsInRange)
     {
+      // Check if can be target
+      if (target.CompareTag("Trespassing") == false) continue;
+
       Vector2 targetDirection = (target.transform.position - transform.position).normalized;
 
       // Check angle

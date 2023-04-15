@@ -44,6 +44,8 @@ public class Movement : MonoBehaviour
   {
     body = GetComponent<Rigidbody2D>();
 
+    print((gameObject.name, body));
+
     Helper.AssertNotNull(body);
   }
 
@@ -115,13 +117,25 @@ public class Movement : MonoBehaviour
 
   IEnumerator MoveToCoroutine(Vector2 targetPosition, UnityAction onReach = null)
   {
-    body.velocity = (targetPosition - (Vector2)transform.position).normalized * speed;
+    float sqrDistance;
 
-    if (faceTargetCoroutine == null)
-      UpdateFacingDirection(targetPosition - (Vector2)transform.position);
+    while (true)
+    {
+      sqrDistance = transform.position.SqrDistance(targetPosition);
 
-    while (transform.position.SqrDistance(targetPosition) > 0.001f)
+      if (sqrDistance <= Mathf.Pow(speed * Time.deltaTime, 2) || sqrDistance <= 0.005f)
+      {
+        body.MovePosition(targetPosition);
+        break;
+      }
+
+      body.velocity = (targetPosition - (Vector2)transform.position).normalized * speed;
+
+      if (faceTargetCoroutine == null)
+        UpdateFacingDirection(targetPosition - (Vector2)transform.position);
+
       yield return new WaitForEndOfFrame();
+    }
 
     Halt();
 
@@ -131,9 +145,14 @@ public class Movement : MonoBehaviour
 
   IEnumerator FollowDirectionCoroutine(Vector2 direction)
   {
-    body.velocity = direction * speed;
+    var delay = new WaitForSeconds(0.1f);
 
-    yield break;
+    while (true)
+    {
+      body.velocity = direction * speed;
+
+      yield return delay;
+    }
   }
 
   IEnumerator FollowCoroutine(Transform target, bool stopOnReach)

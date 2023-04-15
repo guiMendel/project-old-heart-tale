@@ -13,4 +13,13 @@ public class Hazard : MonoBehaviour
 
     otherHealth.TakeDamage();
   }
+
+  private void OnCollisionEnter2D(Collision2D other)
+  {
+    Health otherHealth = other.collider.GetComponent<Health>();
+
+    if (otherHealth == null) return;
+
+    otherHealth.TakeDamage();
+  }
 }

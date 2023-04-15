@@ -44,8 +44,6 @@ public class Projectile : MonoBehaviour
   private void Start()
   {
     Destroy(gameObject, timeToLive);
-
-    print((Mathf.DeltaAngle(0, 90), Mathf.DeltaAngle(90, 0)));
   }
 
   private void Update()
