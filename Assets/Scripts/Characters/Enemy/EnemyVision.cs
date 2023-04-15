@@ -42,6 +42,7 @@ public class EnemyVision : MonoBehaviour
     StartCoroutine(DetectTargets());
   }
 
+  public bool InVision(Transform target) => ActiveTargets.Contains(target);
 
   IEnumerator DetectTargets()
   {

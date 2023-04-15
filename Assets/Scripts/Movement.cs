@@ -33,6 +33,8 @@ public class Movement : MonoBehaviour
 
   Coroutine currentMovement;
 
+  Coroutine faceTargetCoroutine;
+
   // Position to assume in the next fixed update
   Vector2 nextPosition;
 
@@ -87,9 +89,35 @@ public class Movement : MonoBehaviour
     currentMovement = StartCoroutine(FollowCoroutine(target, stopOnReach));
   }
 
-  void UpdateFacingDirection(Vector2 movementDirection)
+  public void Face(Transform target)
   {
-    float angle = movementDirection.AsDegrees();
+    if (faceTargetCoroutine != null) StopCoroutine(faceTargetCoroutine);
+    faceTargetCoroutine = StartCoroutine(FaceTargetCoroutine(target));
+  }
+
+  public void FaceMovement()
+  {
+    StopCoroutine(faceTargetCoroutine);
+    faceTargetCoroutine = null;
+  }
+
+  IEnumerator FaceTargetCoroutine(Transform target)
+  {
+    var delay = new WaitForSeconds(0.1f);
+
+    while (target != null)
+    {
+      UpdateFacingDirection(target.position - transform.position);
+
+      yield return delay;
+    }
+
+    FaceMovement();
+  }
+
+  void UpdateFacingDirection(Vector2 direction)
+  {
+    float angle = direction.AsDegrees();
 
     // Snap to steps of 45 degrees
     FacingDirection = Helper.DegreeToVector2(Mathf.Round(angle / 45) * 45);
@@ -109,7 +137,8 @@ public class Movement : MonoBehaviour
   {
     while (transform.position.SqrDistance(targetPosition) > 0.001f)
     {
-      UpdateFacingDirection(targetPosition - (Vector2)transform.position);
+      if (faceTargetCoroutine == null)
+        UpdateFacingDirection(targetPosition - (Vector2)transform.position);
 
       SetPosition(Vector2.MoveTowards(
         nextPosition, targetPosition, Time.deltaTime * speed));
@@ -127,7 +156,8 @@ public class Movement : MonoBehaviour
   {
     while (true)
     {
-      UpdateFacingDirection(direction);
+      if (faceTargetCoroutine == null)
+        UpdateFacingDirection(direction);
 
       Translate(direction * speed * Time.deltaTime);
 
@@ -147,7 +177,8 @@ public class Movement : MonoBehaviour
 
       if (distance > reachDistance)
       {
-        UpdateFacingDirection(target.position - transform.position);
+        if (faceTargetCoroutine == null)
+          UpdateFacingDirection(target.position - transform.position);
 
         SetPosition(Vector2.MoveTowards(
           nextPosition, target.position, Time.deltaTime * speed));

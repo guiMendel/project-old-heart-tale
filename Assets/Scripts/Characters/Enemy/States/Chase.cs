@@ -46,10 +46,12 @@ public class Chase : CharacterState
     });
   }
 
-  protected override void OnDeactivate()
+  protected override IEnumerator OnDeactivate()
   {
     chaseTarget = null;
     movement.speed = initialSpeed;
+
+    yield break;
   }
 
   void Spot(Transform target)
@@ -88,10 +90,12 @@ public class Chase : CharacterState
   }
 
 
-  protected override void OnActivate()
+  protected override IEnumerator OnActivate()
   {
     movement.Follow(chaseTarget);
     movement.speed = initialSpeed * chaseSpeedModifier;
+
+    yield break;
   }
 
   IEnumerator MaybeLoseTarget()

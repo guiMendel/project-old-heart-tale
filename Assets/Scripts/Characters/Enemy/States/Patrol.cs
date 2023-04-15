@@ -33,7 +33,11 @@ public class Patrol : CharacterState
 
   public void Activate() => manager.ActiveState = this;
 
-  protected override void OnActivate() => FollowPath();
+  protected override IEnumerator OnActivate()
+  {
+    FollowPath();
+    yield break;
+  }
 
   void FollowPath()
   {
@@ -41,7 +45,6 @@ public class Patrol : CharacterState
     {
       if (IsActive) AdvanceTarget();
     });
-
   }
 
   void AdvanceTarget()

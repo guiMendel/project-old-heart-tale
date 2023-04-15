@@ -13,8 +13,8 @@ abstract public class CharacterState : MonoBehaviour
   public bool IsActive => manager.ActiveState == this;
 
 
-  virtual protected void OnActivate() { }
-  virtual protected void OnDeactivate() { }
+  virtual protected IEnumerator OnActivate() { yield break; }
+  virtual protected IEnumerator OnDeactivate() { yield break; }
 
   virtual protected void Awake()
   {
@@ -24,8 +24,8 @@ abstract public class CharacterState : MonoBehaviour
 
     manager.OnChangeState.AddListener((newState, oldState) =>
     {
-      if (newState == this) OnActivate();
-      else if (oldState == this) OnDeactivate();
+      if (newState == this) StartCoroutine(OnActivate());
+      else if (oldState == this) StartCoroutine(OnDeactivate());
     });
   }
 
