@@ -7,11 +7,26 @@ public class Projectile : MonoBehaviour
 {
   // === PARAMS
 
+  public float steerSpeed = 90;
+
   public float speed = 9f;
 
   public Transform target;
 
-  public Vector2 currentDirection;
+  Vector2 _currentDirection;
+  public Vector2 CurrentDirection
+  {
+    get { return _currentDirection; }
+
+    set
+    {
+      _currentDirection = value;
+      body.velocity = value * speed;
+      transform.rotation = Quaternion.Euler(0, 0, value.AsDegrees() - 90);
+    }
+  }
+
+  Vector2 steerDirection;
 
   public float timeToLive = 10f;
 
@@ -28,10 +43,23 @@ public class Projectile : MonoBehaviour
 
   private void Start()
   {
-    body.velocity = currentDirection * speed;
-
-    transform.rotation = Quaternion.Euler(0, 0, currentDirection.AsDegrees() - 90);
-
     Destroy(gameObject, timeToLive);
+
+    print((Mathf.DeltaAngle(0, 90), Mathf.DeltaAngle(90, 0)));
+  }
+
+  private void Update()
+  {
+    if (target == null) return;
+
+    steerDirection = (target.position - transform.position).normalized;
+
+    float angle = CurrentDirection.AsDegrees();
+
+    float deltaAngle = Mathf.DeltaAngle(angle, steerDirection.AsDegrees());
+
+    float angleChange = Mathf.Sign(deltaAngle) * Mathf.Min(Mathf.Abs(deltaAngle), steerSpeed * Time.deltaTime);
+
+    CurrentDirection = Quaternion.Euler(0, 0, angleChange) * CurrentDirection;
   }
 }

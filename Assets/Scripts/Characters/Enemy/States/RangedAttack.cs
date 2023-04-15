@@ -115,7 +115,7 @@ public class RangedAttack : CharacterState
       .GetComponent<Projectile>();
 
     spawnedProjectile.target = target;
-    spawnedProjectile.currentDirection = targetDirection;
+    spawnedProjectile.CurrentDirection = targetDirection;
   }
 
   private Vector2 AimFor(Transform target)
