@@ -461,6 +461,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Ranged Enemy
       objectReference: {fileID: 0}
+    - target: {fileID: 8987060631863661997, guid: ef25ad6154c550445b3a062e38f32b53, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef25ad6154c550445b3a062e38f32b53, type: 3}
 --- !u!1 &743023950
@@ -960,14 +964,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9103788810147833270, guid: 5da45802e3f3c7c468ba529920b338cd, type: 3}
-      propertyPath: waypoints
-      value: 
-      objectReference: {fileID: 743023951}
-    - target: {fileID: 0}
-      propertyPath: waypoints
-      value: 
-      objectReference: {fileID: 743023951}
     - target: {fileID: 8987060631863661997, guid: 5da45802e3f3c7c468ba529920b338cd, type: 3}
       propertyPath: m_Name
       value: Melee Enemy
@@ -976,5 +972,9 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9103788810147833270, guid: 5da45802e3f3c7c468ba529920b338cd, type: 3}
+      propertyPath: waypoints
+      value: 
+      objectReference: {fileID: 743023951}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5da45802e3f3c7c468ba529920b338cd, type: 3}

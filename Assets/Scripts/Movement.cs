@@ -35,9 +35,6 @@ public class Movement : MonoBehaviour
 
   Coroutine faceTargetCoroutine;
 
-  // Position to assume in the next fixed update
-  Vector2 nextPosition;
-
   // === REFS
 
   Rigidbody2D body;
@@ -45,25 +42,18 @@ public class Movement : MonoBehaviour
 
   private void Awake()
   {
-    nextPosition = transform.position;
-
     body = GetComponent<Rigidbody2D>();
-  }
 
-  private void FixedUpdate()
-  {
-    if (body != null) body.MovePosition(nextPosition);
-    else transform.position = nextPosition;
+    Helper.AssertNotNull(body);
   }
 
   // === INTERFACE
 
   public void Halt()
   {
-    if (currentMovement == null) return;
+    body.velocity = Vector2.zero;
 
-    StopCoroutine(currentMovement);
-    currentMovement = null;
+    if (currentMovement != null) StopCoroutine(currentMovement);
   }
 
   public void MoveTo(Vector2 targetPosition, UnityAction onReach = null)
@@ -123,30 +113,17 @@ public class Movement : MonoBehaviour
     FacingDirection = Helper.DegreeToVector2(Mathf.Round(angle / 45) * 45);
   }
 
-  void Translate(Vector2 displacement)
-  {
-    nextPosition = nextPosition + displacement;
-  }
-
-  void SetPosition(Vector2 position)
-  {
-    nextPosition = position;
-  }
-
   IEnumerator MoveToCoroutine(Vector2 targetPosition, UnityAction onReach = null)
   {
+    body.velocity = (targetPosition - (Vector2)transform.position).normalized * speed;
+
+    if (faceTargetCoroutine == null)
+      UpdateFacingDirection(targetPosition - (Vector2)transform.position);
+
     while (transform.position.SqrDistance(targetPosition) > 0.001f)
-    {
-      if (faceTargetCoroutine == null)
-        UpdateFacingDirection(targetPosition - (Vector2)transform.position);
-
-      SetPosition(Vector2.MoveTowards(
-        nextPosition, targetPosition, Time.deltaTime * speed));
-
       yield return new WaitForEndOfFrame();
-    }
 
-    currentMovement = null;
+    Halt();
 
     if (onReach != null)
       onReach();
@@ -154,39 +131,35 @@ public class Movement : MonoBehaviour
 
   IEnumerator FollowDirectionCoroutine(Vector2 direction)
   {
-    while (true)
-    {
-      if (faceTargetCoroutine == null)
-        UpdateFacingDirection(direction);
+    body.velocity = direction * speed;
 
-      Translate(direction * speed * Time.deltaTime);
-
-      yield return new WaitForEndOfFrame();
-    }
-
-    // currentMovement = null;
+    yield break;
   }
 
   IEnumerator FollowCoroutine(Transform target, bool stopOnReach)
   {
     while (true)
     {
-      float distance = Vector2.Distance(transform.position, target.position);
-
-      if (stopOnReach && distance <= reachDistance) break;
-
-      if (distance > reachDistance)
+      if (Vector2.Distance(transform.position, target.position) <= reachDistance)
       {
-        if (faceTargetCoroutine == null)
-          UpdateFacingDirection(target.position - transform.position);
+        if (stopOnReach) break;
 
-        SetPosition(Vector2.MoveTowards(
-          nextPosition, target.position, Time.deltaTime * speed));
+        body.velocity = Vector2.zero;
+      }
+
+      else
+      {
+        Vector2 targetDirection = ((Vector2)target.position - (Vector2)transform.position).normalized;
+
+        body.velocity = targetDirection.normalized * speed;
+
+        if (faceTargetCoroutine == null)
+          UpdateFacingDirection(targetDirection);
       }
 
       yield return new WaitForEndOfFrame();
     }
 
-    currentMovement = null;
+    Halt();
   }
 }
