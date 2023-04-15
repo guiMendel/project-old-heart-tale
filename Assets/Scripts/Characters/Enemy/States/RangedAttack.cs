@@ -120,6 +120,9 @@ public class RangedAttack : CharacterState
 
   private Vector2 AimFor(Transform target)
   {
-    return (target.position - transform.position).normalized;
+    return MovementPrediction.PredictTargetMovement(
+      transform,
+      target,
+      projectile.GetComponent<Projectile>().speed);
   }
 }
