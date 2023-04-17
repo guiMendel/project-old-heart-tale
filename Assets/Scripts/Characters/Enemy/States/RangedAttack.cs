@@ -26,6 +26,7 @@ public class RangedAttack : CharacterState
   Transform currentTarget;
 
   Movement movement => GetComponent<Movement>();
+  FacingDirection facingDirection => GetComponent<FacingDirection>();
 
   // === REFS
 
@@ -80,14 +81,14 @@ public class RangedAttack : CharacterState
 
   protected override IEnumerator OnDeactivate()
   {
-    movement.FaceMovement();
+    facingDirection.StopFollowing();
     yield break;
   }
 
   protected override IEnumerator OnActivate()
   {
     movement.Halt();
-    movement.Face(currentTarget);
+    facingDirection.Follow(currentTarget);
 
     yield return new WaitForSeconds(aimDelay);
 

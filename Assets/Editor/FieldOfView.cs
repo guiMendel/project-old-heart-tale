@@ -15,7 +15,7 @@ public class FieldOfView : Editor
 
     Handles.DrawWireArc(enemyVision.transform.position, Vector3.forward, Vector2.right, 360, enemyVision.range);
 
-    var angle = target.GetComponent<Movement>().FacingDirection.AsDegrees();
+    var angle = target.GetComponent<FacingDirection>().Direction.AsDegrees();
 
     Vector2 angle1 = Helper.DegreeToVector2(angle + enemyVision.angle / 2);
     Vector2 angle2 = Helper.DegreeToVector2(angle - enemyVision.angle / 2);

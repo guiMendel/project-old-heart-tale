@@ -12,41 +12,22 @@ public class Movement : MonoBehaviour
   // For Follow method only
   public float reachDistance = 0.5f;
 
-  // === EVENTS
-
-  // Called when facing direction changes
-  public Event.DoubleVector2 OnChangeFacingDirection;
-
   // === STATE
 
-  Vector2 _facingDirection = Vector2.down;
-  public Vector2 FacingDirection
-  {
-    get { return _facingDirection; }
-
-    private set
-    {
-      OnChangeFacingDirection.Invoke(value, _facingDirection);
-      _facingDirection = value;
-    }
-  }
-
   Coroutine currentMovement;
-
-  Coroutine faceTargetCoroutine;
 
   // === REFS
 
   Rigidbody2D body;
+  FacingDirection facingDirection;
 
 
   private void Awake()
   {
     body = GetComponent<Rigidbody2D>();
+    facingDirection = GetComponent<FacingDirection>();
 
-    print((gameObject.name, body));
-
-    Helper.AssertNotNull(body);
+    Helper.AssertNotNull(body, facingDirection);
   }
 
   // === INTERFACE
@@ -81,40 +62,6 @@ public class Movement : MonoBehaviour
     currentMovement = StartCoroutine(FollowCoroutine(target, stopOnReach));
   }
 
-  public void Face(Transform target)
-  {
-    if (faceTargetCoroutine != null) StopCoroutine(faceTargetCoroutine);
-    faceTargetCoroutine = StartCoroutine(FaceTargetCoroutine(target));
-  }
-
-  public void FaceMovement()
-  {
-    StopCoroutine(faceTargetCoroutine);
-    faceTargetCoroutine = null;
-  }
-
-  IEnumerator FaceTargetCoroutine(Transform target)
-  {
-    var delay = new WaitForSeconds(0.1f);
-
-    while (target != null)
-    {
-      UpdateFacingDirection(target.position - transform.position);
-
-      yield return delay;
-    }
-
-    FaceMovement();
-  }
-
-  void UpdateFacingDirection(Vector2 direction)
-  {
-    float angle = direction.AsDegrees();
-
-    // Snap to steps of 45 degrees
-    FacingDirection = Helper.DegreeToVector2(Mathf.Round(angle / 45) * 45);
-  }
-
   IEnumerator MoveToCoroutine(Vector2 targetPosition, UnityAction onReach = null)
   {
     float sqrDistance;
@@ -131,8 +78,8 @@ public class Movement : MonoBehaviour
 
       body.velocity = (targetPosition - (Vector2)transform.position).normalized * speed;
 
-      if (faceTargetCoroutine == null)
-        UpdateFacingDirection(targetPosition - (Vector2)transform.position);
+      if (facingDirection.FollowTarget == null)
+        facingDirection.FaceDirection(targetPosition - (Vector2)transform.position);
 
       yield return new WaitForEndOfFrame();
     }
@@ -172,8 +119,8 @@ public class Movement : MonoBehaviour
 
         body.velocity = targetDirection.normalized * speed;
 
-        if (faceTargetCoroutine == null)
-          UpdateFacingDirection(targetDirection);
+        if (facingDirection.FollowTarget == null)
+          facingDirection.FaceDirection(targetDirection);
       }
 
       yield return new WaitForEndOfFrame();

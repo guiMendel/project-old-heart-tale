@@ -13,6 +13,8 @@ public class Projectile : MonoBehaviour
 
   public Transform target;
 
+  public float spriteDirection = 0f;
+
   Vector2 _currentDirection;
   public Vector2 CurrentDirection
   {
@@ -22,7 +24,7 @@ public class Projectile : MonoBehaviour
     {
       _currentDirection = value;
       body.velocity = value * speed;
-      transform.rotation = Quaternion.Euler(0, 0, value.AsDegrees() - 90);
+      transform.rotation = Quaternion.Euler(0, 0, value.AsDegrees() - spriteDirection);
     }
   }
 

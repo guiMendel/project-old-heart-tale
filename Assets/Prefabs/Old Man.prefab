@@ -17,9 +17,10 @@ GameObject:
   - component: {fileID: 1776004273}
   - component: {fileID: 1776004274}
   - component: {fileID: -4960044067710445556}
+  - component: {fileID: -7467460754191740079}
   m_Layer: 6
   m_Name: Old Man
-  m_TagString: Untagged
+  m_TagString: Trespassing
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -80,7 +81,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 2
-  m_Sprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
+  m_Sprite: {fileID: -1645820904, guid: 5683b695740474247a1eaca3da707602, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -211,9 +212,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   reachDistance: 0.5
-  OnChangeFacingDirection:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!58 &1776004267
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -253,19 +251,19 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5833995329740377003}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
+  m_CollisionDetection: 1
+  m_Constraints: 4
 --- !u!114 &-4960044067710445556
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,3 +277,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deathRestartTimer: 1
+--- !u!114 &-7467460754191740079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5833995329740377003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6f8d582dea204b4d8facf89dabbe7e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  down: {fileID: 0}
+  downRight: {fileID: 0}
+  right: {fileID: 0}
+  upRight: {fileID: 0}
+  up: {fileID: 0}
+  OnChangeDirection:
+    m_PersistentCalls:
+      m_Calls: []

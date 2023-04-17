@@ -28,13 +28,13 @@ public class EnemyVision : MonoBehaviour
 
   // === REFS
 
-  Movement movement;
+  FacingDirection facingDirection;
 
   private void Awake()
   {
-    movement = GetComponent<Movement>();
+    facingDirection = GetComponent<FacingDirection>();
 
-    Helper.AssertNotNull(movement);
+    Helper.AssertNotNull(facingDirection);
   }
 
   private void Start()
@@ -68,7 +68,7 @@ public class EnemyVision : MonoBehaviour
       Vector2 targetDirection = (target.transform.position - transform.position).normalized;
 
       // Check angle
-      if (Vector2.Angle(targetDirection, movement.FacingDirection) > angle / 2) continue;
+      if (Vector2.Angle(targetDirection, facingDirection.Direction) > angle / 2) continue;
 
       float distance = Vector2.Distance(transform.position, target.transform.position);
 
