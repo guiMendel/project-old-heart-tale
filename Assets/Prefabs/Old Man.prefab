@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 1776004274}
   - component: {fileID: -4960044067710445556}
   - component: {fileID: -7467460754191740079}
+  - component: {fileID: -811791191575969440}
   m_Layer: 6
   m_Name: Old Man
   m_TagString: Trespassing
@@ -78,8 +79,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 2044320199
+  m_SortingLayer: 2
   m_SortingOrder: 2
   m_Sprite: {fileID: -1645820904, guid: 5683b695740474247a1eaca3da707602, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -298,3 +299,15 @@ MonoBehaviour:
   OnChangeDirection:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &-811791191575969440
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5833995329740377003}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b57314c1dff9064e950dc12af9d978f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

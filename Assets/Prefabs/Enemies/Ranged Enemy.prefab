@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6520215656543764727}
   - component: {fileID: 5768720303740473286}
+  - component: {fileID: 4253101778957848631}
   m_Layer: 0
   m_Name: Bow
   m_TagString: Untagged
@@ -25,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5034637104977718899}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalPosition: {x: 0, y: -0.6, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -70,8 +71,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 2044320199
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 1935d26a94cdc1f4e8467fcd97198595, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -84,6 +85,18 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &4253101778957848631
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5034637104977718899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b57314c1dff9064e950dc12af9d978f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8344355166286117941
 GameObject:
   m_ObjectHideFlags: 0
@@ -211,6 +224,7 @@ GameObject:
   - component: {fileID: -2103321622056679381}
   - component: {fileID: 1590493423588781024}
   - component: {fileID: -7795324754542471449}
+  - component: {fileID: 1042841284695003747}
   m_Layer: 0
   m_Name: Ranged Enemy
   m_TagString: Untagged
@@ -434,3 +448,15 @@ MonoBehaviour:
   OnChangeDirection:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1042841284695003747
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8987060631863661997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b57314c1dff9064e950dc12af9d978f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

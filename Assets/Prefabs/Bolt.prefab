@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: -8406850823189392628}
   - component: {fileID: 2141128728255706643}
   - component: {fileID: 1814206266952563499}
+  - component: {fileID: -7787656932520973383}
   m_Layer: 0
   m_Name: Bolt
   m_TagString: Untagged
@@ -74,8 +75,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 2044320199
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d6308aeb287966c458fcbbbad2d8fea4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -154,3 +155,15 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.3125, y: 0.9375}
   m_Direction: 0
+--- !u!114 &-7787656932520973383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9041648749035219203}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b57314c1dff9064e950dc12af9d978f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
