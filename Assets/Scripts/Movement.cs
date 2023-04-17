@@ -98,6 +98,9 @@ public class Movement : MonoBehaviour
     {
       body.velocity = direction * speed;
 
+      if (facingDirection.FollowTarget == null)
+        facingDirection.FaceDirection(direction);
+
       yield return delay;
     }
   }

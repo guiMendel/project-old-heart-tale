@@ -404,11 +404,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6f8d582dea204b4d8facf89dabbe7e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  down: {fileID: 0}
-  downRight: {fileID: 0}
-  right: {fileID: 0}
-  upRight: {fileID: 0}
-  up: {fileID: 0}
+  directions:
+  - {fileID: 1308164760, guid: efbd6764c339d194e8437273ffa67aa3, type: 3}
+  - {fileID: 951546493, guid: efbd6764c339d194e8437273ffa67aa3, type: 3}
+  - {fileID: -311596676, guid: efbd6764c339d194e8437273ffa67aa3, type: 3}
+  - {fileID: 1928657974, guid: efbd6764c339d194e8437273ffa67aa3, type: 3}
+  - {fileID: 2100880301, guid: efbd6764c339d194e8437273ffa67aa3, type: 3}
   OnChangeDirection:
     m_PersistentCalls:
       m_Calls: []
