@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// Based on video https://youtu.be/FwOxLkJTXag
 [CreateAssetMenu]
 public class ExtendedRuleTile : RuleTile<ExtendedRuleTile.Neighbor>
 {
