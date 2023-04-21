@@ -1,0 +1,16 @@
+fileFormatVersion: 2
+guid: 1bfcba8225e7b2f40b7fdd2f21088bf2
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - m_PreviewGrid: {instanceID: 0}
+  - textureAny: {fileID: 2800000, guid: d5ab05e5ae0e9d64fa91b34967a53492, type: 3}
+  - textureEmpty: {fileID: 2800000, guid: 81acbc1ef490b724393a5ceec9b8f3e1, type: 3}
+  - textureSpecified: {fileID: 2800000, guid: 9a4be781273516e48ba8e0673a2f90ea, type: 3}
+  - textureUnknown: {fileID: 2800000, guid: 1ea9a1e36e10d17418dc3378ea1524fc, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
