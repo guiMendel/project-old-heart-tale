@@ -224,6 +224,7 @@ GameObject:
   - component: {fileID: 5856440183328131117}
   - component: {fileID: 6642590208342061715}
   - component: {fileID: 5481891970538200850}
+  - component: {fileID: 1922104649}
   m_Layer: 0
   m_Name: Melee Enemy
   m_TagString: Untagged
@@ -404,7 +405,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!114 &6642590208342061715
 MonoBehaviour:
@@ -439,3 +440,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b57314c1dff9064e950dc12af9d978f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1922104649
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8987060631863661997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7091c27fbbce5be4d997aedd50bf9b0a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  detectionLayer:
+    serializedVersion: 2
+    m_Bits: 512
