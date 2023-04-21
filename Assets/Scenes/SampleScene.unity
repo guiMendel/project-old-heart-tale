@@ -415,7 +415,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1942340743577757987, guid: ef25ad6154c550445b3a062e38f32b53, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1942340743577757987, guid: ef25ad6154c550445b3a062e38f32b53, type: 3}
       propertyPath: m_LocalRotation.w
@@ -448,6 +448,10 @@ PrefabInstance:
     - target: {fileID: 8987060631863661997, guid: ef25ad6154c550445b3a062e38f32b53, type: 3}
       propertyPath: m_Name
       value: Ranged Enemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 8987060631863661997, guid: ef25ad6154c550445b3a062e38f32b53, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef25ad6154c550445b3a062e38f32b53, type: 3}
@@ -607,7 +611,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1034283511}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -63,7 +63,10 @@ public class EnemyVision : MonoBehaviour
     foreach (var target in targetsInRange)
     {
       // Check if can be target
-      if (target.CompareTag("Trespassing") == false) continue;
+      if (
+        target.CompareTag("Trespassing") == false
+        // Can't see above
+        || target.transform.position.z > transform.position.z) continue;
 
       Vector2 targetDirection = (target.transform.position - transform.position).normalized;
 
@@ -73,7 +76,14 @@ public class EnemyVision : MonoBehaviour
       float distance = Vector2.Distance(transform.position, target.transform.position);
 
       // Check obstruction
-      if (Physics2D.Raycast(transform.position, targetDirection, distance, obstructionLayer)) continue;
+
+      // Get filter
+      ContactFilter2D filter = new ContactFilter2D();
+      filter.SetLayerMask(obstructionLayer);
+      filter.SetDepth(transform.position.z, transform.position.z);
+
+      if (Physics2D.Raycast(
+        transform.position, targetDirection, filter, new RaycastHit2D[1], distance) != 0) continue;
 
       ActiveTargets.Add(target.transform);
     }

@@ -68,7 +68,7 @@ public class Movement : MonoBehaviour
 
     while (true)
     {
-      sqrDistance = transform.position.SqrDistance(targetPosition);
+      sqrDistance = targetPosition.SqrDistance((Vector2)transform.position);
 
       if (sqrDistance <= Mathf.Pow(speed * Time.deltaTime, 2) || sqrDistance <= 0.005f)
       {
