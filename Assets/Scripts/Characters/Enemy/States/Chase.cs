@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Chase : CharacterState
@@ -64,11 +65,7 @@ public class Chase : CharacterState
 
     if (IsActive)
     {
-      if (loseTargetTimer != null)
-      {
-        StopCoroutine(loseTargetTimer);
-        loseTargetTimer = null;
-      }
+      StopCoroutine(loseTargetTimer);
 
       chaseTarget = target;
 
@@ -78,11 +75,8 @@ public class Chase : CharacterState
 
   public void Activate(Transform target)
   {
-    if (target == chaseTarget && loseTargetTimer != null)
-    {
+    if (target == chaseTarget)
       StopCoroutine(loseTargetTimer);
-      loseTargetTimer = null;
-    }
 
     chaseTarget = target;
 
@@ -92,7 +86,8 @@ public class Chase : CharacterState
 
   protected override IEnumerator OnActivate()
   {
-    movement.Follow(chaseTarget);
+    movement.Follow(chaseTarget).OnFail(_ => LoseTarget());
+
     movement.speed = initialSpeed * chaseSpeedModifier;
 
     yield break;
@@ -104,11 +99,20 @@ public class Chase : CharacterState
 
     if (IsActive == false) yield break;
 
-    movement.MoveTo(chaseTarget.position, () =>
+    LoseTarget();
+  }
+
+  private void LoseTarget()
+  {
+    Null StartPatrol()
     {
       if (IsActive) GetComponent<Patrol>().Activate();
-    });
 
-    loseTargetTimer = null;
+      return null;
+    }
+
+    movement.MoveTo(chaseTarget.position)
+      .Then(_ => StartPatrol())
+      .OnFail(_ => StartPatrol());
   }
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using ExtensionMethods;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,6 +12,9 @@ public class Movement : MonoBehaviour
 
   // For Follow method only
   public float reachDistance = 0.5f;
+
+  // How long this character can be stuck before a follow or move to task is considered to fail
+  public float stuckTolerance = 3f;
 
   // === STATE
 
@@ -39,11 +43,14 @@ public class Movement : MonoBehaviour
     if (currentMovement != null) StopCoroutine(currentMovement);
   }
 
-  public void MoveTo(Vector2 targetPosition, UnityAction onReach = null, UnityAction onFail = null)
+  public Promise<Null> MoveTo(Vector2 targetPosition)
   {
-    Halt();
+    return new Promise<Null>((resolve, reject) =>
+    {
+      Halt();
 
-    currentMovement = StartCoroutine(MoveToCoroutine(targetPosition, onReach));
+      currentMovement = StartCoroutine(MoveToCoroutine(targetPosition, resolve, reject));
+    });
   }
 
   public void FollowDirection(Vector2 direction)
@@ -55,16 +62,21 @@ public class Movement : MonoBehaviour
     currentMovement = StartCoroutine(FollowDirectionCoroutine(direction.normalized));
   }
 
-  public void Follow(Transform target, bool stopOnReach = false)
+  public Promise<Null> Follow(Transform target, bool stopOnReach = false)
   {
-    Halt();
+    return new Promise<Null>((resolve, reject) =>
+    {
+      Halt();
 
-    currentMovement = StartCoroutine(FollowCoroutine(target, stopOnReach));
+      currentMovement = StartCoroutine(FollowCoroutine(target, stopOnReach, resolve, reject));
+    });
   }
 
-  IEnumerator MoveToCoroutine(Vector2 targetPosition, UnityAction onReach = null)
+  IEnumerator MoveToCoroutine(Vector2 targetPosition, UnityAction<Null> onReach, UnityAction<string> onFail)
   {
     float sqrDistance;
+
+    stuckTime = 0f;
 
     while (true)
     {
@@ -73,6 +85,10 @@ public class Movement : MonoBehaviour
       if (sqrDistance <= Mathf.Pow(speed * Time.deltaTime, 2) || sqrDistance <= 0.005f)
       {
         body.MovePosition(targetPosition);
+        Halt();
+
+        onReach(null);
+
         break;
       }
 
@@ -82,12 +98,16 @@ public class Movement : MonoBehaviour
         facingDirection.FaceDirection(targetPosition - (Vector2)transform.position);
 
       yield return new WaitForEndOfFrame();
+
+      // Check if stuck
+      if (StuckCheck())
+      {
+        Halt();
+
+        onFail("Got stuck");
+        break;
+      }
     }
-
-    Halt();
-
-    if (onReach != null)
-      onReach();
   }
 
   IEnumerator FollowDirectionCoroutine(Vector2 direction)
@@ -105,13 +125,21 @@ public class Movement : MonoBehaviour
     }
   }
 
-  IEnumerator FollowCoroutine(Transform target, bool stopOnReach)
+  IEnumerator FollowCoroutine(Transform target, bool stopOnReach, UnityAction<Null> onReach, UnityAction<string> onFail)
   {
+    stuckTime = 0f;
+
     while (true)
     {
       if (Vector2.Distance(transform.position, target.position) <= reachDistance)
       {
-        if (stopOnReach) break;
+        if (stopOnReach)
+        {
+          Halt();
+
+          onReach(null);
+          break;
+        }
 
         body.velocity = Vector2.zero;
       }
@@ -127,8 +155,38 @@ public class Movement : MonoBehaviour
       }
 
       yield return new WaitForEndOfFrame();
+
+      // Check if stuck
+      if (StuckCheck())
+      {
+        Halt();
+
+        onFail("Got stuck");
+        break;
+      }
+    }
+  }
+
+  // If character stays stuckTolerance long without moving, we give up the move task
+  float stuckTime = 0f;
+
+  Vector2 lastPosition;
+
+  bool StuckCheck()
+  {
+    if (lastPosition.SqrDistance(transform.position) >= 0.04)
+      stuckTime = 0;
+
+    else
+    {
+      stuckTime += Time.deltaTime;
+
+      if (stuckTime > stuckTolerance)
+        return true;
     }
 
-    Halt();
+    lastPosition = transform.position;
+
+    return false;
   }
 }

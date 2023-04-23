@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Patrol : CharacterState
@@ -41,10 +42,16 @@ public class Patrol : CharacterState
 
   void FollowPath()
   {
-    movement.MoveTo(waypoints.GetChild(currentWaypoint).position, () =>
+    Null Advance()
     {
       if (IsActive) AdvanceTarget();
-    });
+
+      return null;
+    }
+
+    movement.MoveTo(waypoints.GetChild(currentWaypoint).position)
+      .Then(_ => Advance())
+      .OnFail(_ => Advance());
   }
 
   void AdvanceTarget()

@@ -49,12 +49,8 @@ public class OutputInputPromise<T, S> : InputPromise<S>
       cachedResult = result;
 
       foreach (var nextPromise in chainedPromises) nextPromise.Trigger(result);
-    }, (message) =>
-    {
-      Pending = false;
-
-      foreach (var failTask in failTasks) failTask(message);
-    });
+    },
+    Fail);
   }
 
   override public void Fail(string message)
@@ -106,8 +102,6 @@ public class Promise<T>
 
   public bool Pending => internalPromise.Pending;
 
-
-  Promise() { }
 
   public Promise(UnityAction<UnityAction<T>, UnityAction<string>> promisedTask)
   {
