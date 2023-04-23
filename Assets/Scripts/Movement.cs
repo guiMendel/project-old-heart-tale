@@ -39,7 +39,7 @@ public class Movement : MonoBehaviour
     if (currentMovement != null) StopCoroutine(currentMovement);
   }
 
-  public void MoveTo(Vector2 targetPosition, UnityAction onReach = null)
+  public void MoveTo(Vector2 targetPosition, UnityAction onReach = null, UnityAction onFail = null)
   {
     Halt();
 
