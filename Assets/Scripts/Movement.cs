@@ -2,13 +2,15 @@ using System.Collections;
 using ExtensionMethods;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Events;
 
 public class Movement : MonoBehaviour
 {
   // === PARAMS
 
-  public float speed = 5f;
+  // Initial speed of agent. Actual speed is set through navMeshAgent
+  public float initialSpeed = 5f;
 
   // For Follow method only
   public float reachDistance = 0.5f;
@@ -20,25 +22,38 @@ public class Movement : MonoBehaviour
 
   Coroutine currentMovement;
 
+  float Speed
+  {
+    get => navAgent.speed;
+    set => navAgent.speed = value;
+  }
+
   // === REFS
 
-  Rigidbody2D body;
   FacingDirection facingDirection;
+  NavMeshAgent navAgent;
 
 
   private void Awake()
   {
-    body = GetComponent<Rigidbody2D>();
     facingDirection = GetComponent<FacingDirection>();
+    navAgent = GetComponent<NavMeshAgent>();
 
-    Helper.AssertNotNull(body, facingDirection);
+    Helper.AssertNotNull(facingDirection, navAgent);
+  }
+
+  private void Start()
+  {
+    navAgent.updateRotation = false;
+    navAgent.updateUpAxis = false;
+    navAgent.speed = initialSpeed;
   }
 
   // === INTERFACE
 
   public void Halt()
   {
-    body.velocity = Vector2.zero;
+    navAgent.ResetPath();
 
     if (currentMovement != null) StopCoroutine(currentMovement);
   }
@@ -72,32 +87,40 @@ public class Movement : MonoBehaviour
     });
   }
 
+  private bool NavigationEnded()
+  {
+    return navAgent.pathPending == false
+            && navAgent.remainingDistance <= navAgent.stoppingDistance
+            && (navAgent.hasPath == false || Mathf.Approximately(navAgent.velocity.sqrMagnitude, 0));
+  }
+
   IEnumerator MoveToCoroutine(Vector2 targetPosition, UnityAction<Null> onReach, UnityAction<string> onFail)
   {
-    float sqrDistance;
+    ResetStuckCheck();
 
-    stuckTime = 0f;
+    navAgent.SetDestination(targetPosition);
+
+    var delay = new WaitForSeconds(0.1f);
 
     while (true)
     {
-      sqrDistance = targetPosition.SqrDistance((Vector2)transform.position);
-
-      if (sqrDistance <= Mathf.Pow(speed * Time.deltaTime, 2) || sqrDistance <= 0.005f)
+      // Check if stopped
+      if (NavigationEnded())
       {
-        body.MovePosition(targetPosition);
         Halt();
 
-        onReach(null);
+        // Check if the path type is a complete path, not a partial or invalid path
+        if (navAgent.pathStatus == NavMeshPathStatus.PathComplete) onReach(null);
+
+        else onFail("Couldn't reach final destination");
 
         break;
       }
 
-      body.velocity = (targetPosition - (Vector2)transform.position).normalized * speed;
+      if (facingDirection.FollowTarget == null && navAgent.velocity.sqrMagnitude > 0.1f)
+        facingDirection.FaceDirection(navAgent.velocity);
 
-      if (facingDirection.FollowTarget == null)
-        facingDirection.FaceDirection(targetPosition - (Vector2)transform.position);
-
-      yield return new WaitForEndOfFrame();
+      yield return delay;
 
       // Check if stuck
       if (StuckCheck())
@@ -112,49 +135,49 @@ public class Movement : MonoBehaviour
 
   IEnumerator FollowDirectionCoroutine(Vector2 direction)
   {
-    var delay = new WaitForSeconds(0.1f);
-
     while (true)
     {
-      body.velocity = direction * speed;
+      // Never let X axis be 0, otherwise Unity bugs and doesn't add any velocity
+      Vector2 targetVelocity = direction * Speed + (direction.x == 0
+        ? Vector2.right * Mathf.Sign(direction.y) * 0.01f
+        : Vector2.zero);
+
+      navAgent.velocity = targetVelocity;
 
       if (facingDirection.FollowTarget == null)
         facingDirection.FaceDirection(direction);
 
-      yield return delay;
+      yield return null;
     }
   }
 
   IEnumerator FollowCoroutine(Transform target, bool stopOnReach, UnityAction<Null> onReach, UnityAction<string> onFail)
   {
-    stuckTime = 0f;
+    void SetTargetDestination() => navAgent.SetDestination(target.position);
+
+    ResetStuckCheck();
+
+    var delay = new WaitForSeconds(0.1f);
 
     while (true)
     {
-      if (Vector2.Distance(transform.position, target.position) <= reachDistance)
+      SetTargetDestination();
+
+      if (
+        stopOnReach
+        && navAgent.pathStatus == NavMeshPathStatus.PathComplete
+        && NavigationEnded())
       {
-        if (stopOnReach)
-        {
-          Halt();
+        Halt();
 
-          onReach(null);
-          break;
-        }
-
-        body.velocity = Vector2.zero;
+        onReach(null);
+        break;
       }
 
-      else
-      {
-        Vector2 targetDirection = ((Vector2)target.position - (Vector2)transform.position).normalized;
+      if (facingDirection.FollowTarget == null && navAgent.velocity.sqrMagnitude > 0.1f)
+        facingDirection.FaceDirection(target.position - transform.position);
 
-        body.velocity = targetDirection.normalized * speed;
-
-        if (facingDirection.FollowTarget == null)
-          facingDirection.FaceDirection(targetDirection);
-      }
-
-      yield return new WaitForEndOfFrame();
+      yield return delay;
 
       // Check if stuck
       if (StuckCheck())
@@ -167,22 +190,28 @@ public class Movement : MonoBehaviour
     }
   }
 
-  // If character stays stuckTolerance long without moving, we give up the move task
-  float stuckTime = 0f;
+  // === STUCK CHECK
 
   Vector2 lastPosition;
 
+  float stuckStartTime = -1;
+
+  void ResetStuckCheck()
+  {
+    lastPosition = transform.position;
+    stuckStartTime = -1;
+  }
+
   bool StuckCheck()
   {
-    if (lastPosition.SqrDistance(transform.position) >= 0.04)
-      stuckTime = 0;
+    if (Mathf.Approximately(lastPosition.SqrDistance(transform.position), 0) == false)
+      stuckStartTime = -1;
 
     else
     {
-      stuckTime += Time.deltaTime;
+      if (stuckStartTime == -1) stuckStartTime = Time.time;
 
-      if (stuckTime > stuckTolerance)
-        return true;
+      else if (Time.time - stuckStartTime >= stuckTolerance) return true;
     }
 
     lastPosition = transform.position;

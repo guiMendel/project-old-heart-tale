@@ -34,7 +34,7 @@ public class Chase : CharacterState
 
     Helper.AssertNotNull(movement, enemyVision);
 
-    initialSpeed = movement.speed;
+    initialSpeed = movement.initialSpeed;
 
     enemyVision.OnDetectTarget.AddListener(target =>
     {
@@ -50,7 +50,7 @@ public class Chase : CharacterState
   protected override IEnumerator OnDeactivate()
   {
     chaseTarget = null;
-    movement.speed = initialSpeed;
+    movement.initialSpeed = initialSpeed;
 
     yield break;
   }
@@ -88,7 +88,7 @@ public class Chase : CharacterState
   {
     movement.Follow(chaseTarget).OnFail(_ => LoseTarget());
 
-    movement.speed = initialSpeed * chaseSpeedModifier;
+    movement.initialSpeed = initialSpeed * chaseSpeedModifier;
 
     yield break;
   }
