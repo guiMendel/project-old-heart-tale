@@ -29,12 +29,14 @@ public class EnemyVision : MonoBehaviour
   // === REFS
 
   FacingDirection facingDirection;
+  GroundLevel groundLevel;
 
   private void Awake()
   {
     facingDirection = GetComponent<FacingDirection>();
+    groundLevel = GetComponent<GroundLevel>();
 
-    Helper.AssertNotNull(facingDirection);
+    Helper.AssertNotNull(facingDirection, groundLevel);
   }
 
   private void Start()
@@ -60,13 +62,16 @@ public class EnemyVision : MonoBehaviour
     var previousTargets = new List<Transform>(ActiveTargets);
     ActiveTargets.Clear();
 
+    print(targetsInRange);
+
     foreach (var target in targetsInRange)
     {
       // Check if can be target
-      if (
-        target.CompareTag("Trespassing") == false
-        // Can't see above
-        || target.transform.position.z > transform.position.z) continue;
+      if (target.CompareTag("Trespassing") == false) continue;
+
+      // Can't see above
+      GroundLevel targetLevel = target.GetComponent<GroundLevel>();
+      if (targetLevel == null || targetLevel.Level > groundLevel.Level) continue;
 
       Vector2 targetDirection = (target.transform.position - transform.position).normalized;
 
@@ -76,14 +81,32 @@ public class EnemyVision : MonoBehaviour
       float distance = Vector2.Distance(transform.position, target.transform.position);
 
       // Check obstruction
+      List<RaycastHit2D> hits = new List<RaycastHit2D>();
 
       // Get filter
       ContactFilter2D filter = new ContactFilter2D();
       filter.SetLayerMask(obstructionLayer);
-      filter.SetDepth(transform.position.z, transform.position.z);
 
-      if (Physics2D.Raycast(
-        transform.position, targetDirection, filter, new RaycastHit2D[1], distance) != 0) continue;
+      if (Physics2D.Raycast(transform.position, targetDirection, filter, hits, distance) > 0)
+      {
+        bool obstructed = false;
+
+        // Can only be obstructed by objects in same level
+        foreach (var hit in hits)
+        {
+          GroundLevel hitLevel = hit.collider.GetComponent<GroundLevel>();
+
+          print((groundLevel.Level, hitLevel.Level));
+          
+          if (hitLevel != null && hitLevel.Level == groundLevel.Level)
+          {
+            obstructed = true;
+            break;
+          }
+        }
+
+        if (obstructed) continue;
+      }
 
       ActiveTargets.Add(target.transform);
     }

@@ -18,8 +18,6 @@ public class Chase : CharacterState
 
   Coroutine loseTargetTimer;
 
-  float initialSpeed;
-
   // === REFS
 
   Movement movement;
@@ -34,12 +32,7 @@ public class Chase : CharacterState
 
     Helper.AssertNotNull(movement, enemyVision);
 
-    initialSpeed = movement.initialSpeed;
-
-    enemyVision.OnDetectTarget.AddListener(target =>
-    {
-      if (IsActive || manager.ActiveState is Patrol) Activate(target);
-    });
+    enemyVision.OnDetectTarget.AddListener(Spot);
 
     enemyVision.OnLoseTarget.AddListener((target) =>
     {
@@ -50,7 +43,7 @@ public class Chase : CharacterState
   protected override IEnumerator OnDeactivate()
   {
     chaseTarget = null;
-    movement.initialSpeed = initialSpeed;
+    movement.Speed = movement.initialSpeed;
 
     yield break;
   }
@@ -69,26 +62,24 @@ public class Chase : CharacterState
 
       chaseTarget = target;
 
-      movement.Follow(chaseTarget);
+      FollowTarget();
     }
   }
 
+  private void FollowTarget() => movement.Follow(chaseTarget).OnFail(_ => LoseTarget());
+
   public void Activate(Transform target)
   {
-    if (target == chaseTarget)
-      StopCoroutine(loseTargetTimer);
-
     chaseTarget = target;
 
     manager.ActiveState = this;
   }
 
-
   protected override IEnumerator OnActivate()
   {
-    movement.Follow(chaseTarget).OnFail(_ => LoseTarget());
+    FollowTarget();
 
-    movement.initialSpeed = initialSpeed * chaseSpeedModifier;
+    movement.Speed = movement.initialSpeed * chaseSpeedModifier;
 
     yield break;
   }
@@ -104,15 +95,20 @@ public class Chase : CharacterState
 
   private void LoseTarget()
   {
-    Null StartPatrol()
+    Null PatrolIfLost()
     {
-      if (IsActive) GetComponent<Patrol>().Activate();
+      if (IsActive && chaseTarget == null) GetComponent<Patrol>().Activate();
 
       return null;
     }
 
-    movement.MoveTo(chaseTarget.position)
-      .Then(_ => StartPatrol())
-      .OnFail(_ => StartPatrol());
+    Vector2 lastSeenPosition = chaseTarget.position;
+
+    chaseTarget = null;
+
+    // Go to last seen position
+    movement.MoveTo(lastSeenPosition)
+      .Then(_ => PatrolIfLost())
+      .OnFail(_ => PatrolIfLost());
   }
 }

@@ -22,7 +22,7 @@ public class Movement : MonoBehaviour
 
   Coroutine currentMovement;
 
-  float Speed
+  public float Speed
   {
     get => navAgent.speed;
     set => navAgent.speed = value;
